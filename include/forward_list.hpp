@@ -15,7 +15,10 @@ private:
     std::size_t size = 0;
 public:
     ForwardList();
-    explicit ForwardList(std::initializer_list<T> list_values);
+    ForwardList(T head_value);
+    Node<T>* return_head() {return head.get();}
+    Node<T>* return_tail() {return tail;}
+    int return_size() {return size;}
 };
 
 template <typename T>
@@ -23,6 +26,16 @@ ForwardList<T>::ForwardList()
 {
 
 }
+
+template <typename T>
+ForwardList<T>::ForwardList(T head_value)
+{
+    std::unique_ptr<Node<T>> head_temp = std::make_unique<Node<T>>(head_value);
+    head = std::move(head_temp);
+    size++;
+    tail = head.get();
+}
+
 
 
 #endif

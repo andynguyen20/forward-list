@@ -10,6 +10,7 @@ private:
     T node_data;
 public:
     Node(T data);
+    T return_data() {return node_data;}
 };
 
 template <typename T>
