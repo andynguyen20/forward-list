@@ -3,11 +3,11 @@
 
 int main()
 {
-    int n = 30;
+    int n = 50;
     ForwardList<int> test_list{n};
-    std::cout << test_list.return_head() << '\n';
-    std::cout << test_list.size() << '\n';
+    test_list.push_front(40);
+    test_list.push_front(30);
+    test_list.push_front(20);
     test_list.push_front(10);
-    std::cout << test_list.return_head() << '\n';
-    std::cout << test_list.size() << '\n';
+    test_list.print();
 }
