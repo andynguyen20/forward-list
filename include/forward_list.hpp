@@ -6,6 +6,7 @@
 #include <initializer_list>
 #include <cstddef>
 #include <utility>
+#include <stdexcept>
 
 template <typename T>
 class ForwardList {
@@ -26,12 +27,11 @@ public:
     ForwardList(T head_val);
     Node* return_head() {return head.get();}
     Node* return_tail() {return tail;}
-    int size() {return size_val;}
-    bool empty() {return !size_val;}
+    int size();
+    bool empty();
     void push_front(T val);
     void pop_front();
     void print();
-    int bytes();
 };
 
 template <typename T>
@@ -61,6 +61,9 @@ void ForwardList<T>::push_front(T val)
 template <typename T>
 void ForwardList<T>::pop_front()
 {
+    if (size_val == 0) {
+        throw std::runtime_error{"ForwardList<T>::pop_front(): List is empty, cannot pop any elements"};
+    }
     std::unique_ptr<Node> node_temp = std::move(head);
     head = std::move(node_temp.get()->next_node);
     size_val--;
@@ -79,6 +82,23 @@ void ForwardList<T>::print()
     std::cout << "NULL\n";
 }
 
+template <typename T>
+int ForwardList<T>::size() 
+{
+    std::cout << "ForwardList<T>::size(): size = " << size_val << '\n';
+    return size_val;
+}
 
+template <typename T>
+bool ForwardList<T>::empty() 
+{
+    if (size_val == 0) {
+        std::cout << "ForwardList<T>::empty: List is empty\n";
+        return true;
+    } else {
+        std::cout << "ForwardList<T>::empty: List is not empty\n";
+        return false;
+    }
+}
 
 #endif
