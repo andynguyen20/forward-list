@@ -15,6 +15,7 @@ private:
         std::unique_ptr<Node> next_node;
         T node_data;
         explicit Node(T data) : node_data(std::move(data)) { }
+        ~Node() {std::cout << "Destroying node: " << node_data << '\n';}
         T return_data() {return node_data;}   
     };
     std::unique_ptr<Node> head;
@@ -28,7 +29,9 @@ public:
     int size() {return size_val;}
     bool empty() {return !size_val;}
     void push_front(T val);
+    void pop_front();
     void print();
+    int bytes();
 };
 
 template <typename T>
@@ -50,9 +53,17 @@ template <typename T>
 void ForwardList<T>::push_front(T val)
 {
     std::unique_ptr<Node> node_temp = std::make_unique<Node>(val);
-    node_temp->next_node = std::move(head);
+    node_temp.get()->next_node = std::move(head);
     head = std::move(node_temp);
     size_val++;
+}
+
+template <typename T>
+void ForwardList<T>::pop_front()
+{
+    std::unique_ptr<Node> node_temp = std::move(head);
+    head = std::move(node_temp.get()->next_node);
+    size_val--;
 }
 
 template <typename T>
@@ -67,5 +78,7 @@ void ForwardList<T>::print()
     }
     std::cout << "NULL\n";
 }
+
+
 
 #endif

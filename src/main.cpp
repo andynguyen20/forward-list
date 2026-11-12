@@ -10,4 +10,7 @@ int main()
     test_list.push_front(20);
     test_list.push_front(10);
     test_list.print();
+    test_list.pop_front();
+    test_list.pop_front();
+    test_list.print();
 }
