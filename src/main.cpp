@@ -19,10 +19,8 @@ int main()
         test_list.print();
         test_list.size();
         test_list.empty();
-        test_list.pop_front();
-        test_list.pop_front();
-        test_list.pop_front();
-        test_list.pop_front();
+        std::cout << test_list.front() << '\n';
+        
     } catch (const std::runtime_error& e) {
         std::cerr << "Error: " << e.what() << '\n';
     }

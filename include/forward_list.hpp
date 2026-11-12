@@ -25,13 +25,14 @@ private:
 public:
     ForwardList();
     ForwardList(T head_val);
-    Node* return_head() {return head.get();}
-    Node* return_tail() {return tail;}
+    Node* begin() {return head.get();}
+    Node* end() {return tail;}
     int size();
     bool empty();
     void push_front(T val);
     void pop_front();
     void print();
+    T& front();
 };
 
 template <typename T>
@@ -99,6 +100,15 @@ bool ForwardList<T>::empty()
         std::cout << "ForwardList<T>::empty: List is not empty\n";
         return false;
     }
+}
+
+template <typename T>
+T& ForwardList<T>::front()
+{
+    if (!head) {
+        throw std::runtime_error{"ForwardList<T>::front(): List is empty"};
+    }
+    return head.get()->node_data;
 }
 
 #endif
