@@ -8,18 +8,12 @@ int main()
         int n = 50;
         ForwardList<int> test_list{n};
         test_list.push_front(40);
-        test_list.push_front(30);
-        test_list.push_front(20);
-        test_list.push_front(10);
+        ForwardList<int>::Node* index_ptr = test_list.begin();
         test_list.print();
-        test_list.size();
-        test_list.empty();
-        test_list.pop_front();
-        test_list.pop_front();
+        test_list.insert_after(index_ptr, 45);
         test_list.print();
-        test_list.size();
-        test_list.empty();
-        std::cout << test_list.front() << '\n';
+
+
         
     } catch (const std::runtime_error& e) {
         std::cerr << "Error: " << e.what() << '\n';

@@ -10,29 +10,32 @@
 
 template <typename T>
 class ForwardList {
-private:
+public:
     struct Node {
     public:
         std::unique_ptr<Node> next_node;
         T node_data;
-        explicit Node(T data) : node_data(std::move(data)) { }
+        explicit Node(const T& data) : node_data(std::move(data)) { }
         ~Node() {std::cout << "Destroying node: " << node_data << '\n';}
         T return_data() {return node_data;}   
     };
+private:
     std::unique_ptr<Node> head;
     Node* tail;
     std::size_t size_val = 0;
 public:
     ForwardList();
-    ForwardList(T head_val);
+    ForwardList(const T& head_val);
     Node* begin() {return head.get();}
     Node* end() {return tail;}
     int size();
     bool empty();
-    void push_front(T val);
+    void push_front(const T& val);
     void pop_front();
     void print();
     T& front();
+    void insert_after(Node* pos, const T& val);
+    void print_ptr();
 };
 
 template <typename T>
@@ -42,7 +45,7 @@ ForwardList<T>::ForwardList()
 }
 
 template <typename T>
-ForwardList<T>::ForwardList(T head_val)
+ForwardList<T>::ForwardList(const T& head_val)
 {
     std::unique_ptr<Node> head_temp = std::make_unique<Node>(head_val);
     head = std::move(head_temp);
@@ -51,7 +54,7 @@ ForwardList<T>::ForwardList(T head_val)
 }
 
 template <typename T>
-void ForwardList<T>::push_front(T val)
+void ForwardList<T>::push_front(const T& val)
 {
     std::unique_ptr<Node> node_temp = std::make_unique<Node>(val);
     node_temp.get()->next_node = std::move(head);
@@ -111,4 +114,29 @@ T& ForwardList<T>::front()
     return head.get()->node_data;
 }
 
+template <typename T>
+void ForwardList<T>::insert_after(Node* pos, const T& val)
+{
+    Node* curr_node = head.get();
+    while (curr_node != pos && curr_node != nullptr) {
+        curr_node = curr_node->next_node.get();
+    }
+    if (!curr_node) {
+        throw std::runtime_error{"ForwardList<T>::insert_after: could not find Node*."};
+    }
+    std::cout << "I also made it here\n";
+    std::unique_ptr node_temp = std::make_unique<Node>(val);
+    node_temp->next_node = std::move(curr_node->next_node);
+    curr_node->next_node = std::move(node_temp);
+}
+
+template <typename T>
+void ForwardList<T>::print_ptr()
+{
+    Node* curr_node = head.get();
+    while (curr_node) {
+        std::cout << "Value: " << curr_node->node_data << " | Address: " << curr_node << '\n';
+        curr_node = curr_node->next_node.get();
+    }
+}
 #endif
