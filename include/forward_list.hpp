@@ -25,6 +25,7 @@ private:
     std::size_t size_val = 0;
 public:
     ForwardList();
+    ~ForwardList();
     ForwardList(const T& head_val);
     Node* begin() {return head.get();}
     Node* end() {return tail;}
@@ -44,6 +45,13 @@ template <typename T>
 ForwardList<T>::ForwardList()
 {
 
+}
+
+template <typename T>
+ForwardList<T>::~ForwardList()
+{
+    clear();
+    std::cout << "ForwardList<T>::~ForwardList() destructed\n";
 }
 
 template <typename T>
@@ -168,7 +176,6 @@ void ForwardList<T>::clear()
         curr_node = std::move(next);
         next = std::move(curr_node->next_node);
     }
-    std::cout << "I made it\n";
 }
 
 #endif
