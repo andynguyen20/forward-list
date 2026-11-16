@@ -36,6 +36,7 @@ public:
     T& front();
     void insert_after(Node* pos, const T& val);
     void print_ptr();
+    void erase_after(Node* pos);
 };
 
 template <typename T>
@@ -124,7 +125,6 @@ void ForwardList<T>::insert_after(Node* pos, const T& val)
     if (!curr_node) {
         throw std::runtime_error{"ForwardList<T>::insert_after: could not find Node*."};
     }
-    std::cout << "I also made it here\n";
     std::unique_ptr node_temp = std::make_unique<Node>(val);
     node_temp->next_node = std::move(curr_node->next_node);
     curr_node->next_node = std::move(node_temp);
@@ -139,4 +139,20 @@ void ForwardList<T>::print_ptr()
         curr_node = curr_node->next_node.get();
     }
 }
+
+template <typename T>
+void ForwardList<T>::erase_after(Node* pos)
+{
+    Node* curr_node = head.get();
+    while (curr_node != pos && curr_node != nullptr) {
+        curr_node = curr_node->next_node.get();
+    }
+    if (!curr_node) {
+        throw std::runtime_error{"ForwardList<T>::insert_after: could not find Node*."};
+    }
+    std::unique_ptr destructed_node = std::move(curr_node->next_node);
+    curr_node->next_node = std::move(destructed_node->next_node);
+}
+
+
 #endif
