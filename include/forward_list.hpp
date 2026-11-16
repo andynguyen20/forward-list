@@ -37,6 +37,7 @@ public:
     void insert_after(Node* pos, const T& val);
     void print_ptr();
     void erase_after(Node* pos);
+    void clear();
 };
 
 template <typename T>
@@ -154,5 +155,20 @@ void ForwardList<T>::erase_after(Node* pos)
     curr_node->next_node = std::move(destructed_node->next_node);
 }
 
+template <typename T>
+void ForwardList<T>::clear()
+{
+    if (!head.get()) {
+        return;
+    }
+    std::unique_ptr<Node> curr_node = std::move(head);
+    std::unique_ptr<Node> next = std::move(curr_node->next_node);
+    while (curr_node && next) {
+        curr_node.reset();
+        curr_node = std::move(next);
+        next = std::move(curr_node->next_node);
+    }
+    std::cout << "I made it\n";
+}
 
 #endif
