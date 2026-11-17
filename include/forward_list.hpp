@@ -15,6 +15,11 @@ public:
     public:
         std::unique_ptr<Node> next_node;
         T node_data;
+        Node(const Node& node) {node_data = node.node_data; 
+                                next_node = std::make_unique<Node>(node.next_node->node_data);} 
+        Node& operator=(const Node& node) {node_data = node.node_data; 
+                                           next_node = std::make_unique<Node>(node.next_node->node_data);
+                                           return *this;}
         explicit Node(const T& data) : node_data(std::move(data)) { }
         ~Node() {std::cout << "Destroying node: " << node_data << '\n';}
         T return_data() {return node_data;}   
@@ -27,6 +32,7 @@ public:
     ForwardList();
     ~ForwardList();
     ForwardList(const T& head_val);
+    ForwardList(const ForwardList& list);
     Node* begin() {return head.get();}
     Node* end() {return tail;}
     int size();
@@ -61,6 +67,24 @@ ForwardList<T>::ForwardList(const T& head_val)
     head = std::move(head_temp);
     tail = head.get();
     size_val++;
+}
+
+template <typename T>
+ForwardList<T>::ForwardList(const ForwardList& list)
+{
+    if (!list.head.get()) {
+        return;
+    }
+    Node* copy_ptr = list.head.get();
+    head = std::make_unique<Node>(*copy_ptr);
+    Node* it_ptr = head.get();
+    copy_ptr = copy_ptr->next_node.get();
+    while (copy_ptr->next_node.get()) {
+        it_ptr->next_node = std::make_unique<Node>(*copy_ptr);
+        it_ptr = it_ptr->next_node.get();
+        copy_ptr = copy_ptr->next_node.get();
+    }
+    tail = list.tail;
 }
 
 template <typename T>
