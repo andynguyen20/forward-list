@@ -17,6 +17,8 @@ int main()
         test_list_2.print();
         std::cout << "done\n";
         test_list.print();
+        test_list.size();
+        test_list_2.size();
     } catch (const std::runtime_error& e) {
         std::cerr << "Error: " << e.what() << '\n';
     }

@@ -85,6 +85,7 @@ ForwardList<T>::ForwardList(const ForwardList& list)
         copy_ptr = copy_ptr->next_node.get();
     }
     tail = list.tail;
+    size_val = list.size_val;
 }
 
 template <typename T>
