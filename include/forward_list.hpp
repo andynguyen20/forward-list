@@ -17,9 +17,6 @@ public:
         T node_data;
         Node(const Node& node) {node_data = node.node_data; 
                                 next_node = std::make_unique<Node>(node.next_node->node_data);} 
-        Node& operator=(const Node& node) {node_data = node.node_data; 
-                                           next_node = std::make_unique<Node>(node.next_node->node_data);
-                                           return *this;}
         explicit Node(const T& data) : node_data(std::move(data)) { }
         ~Node() {std::cout << "Destroying node: " << node_data << '\n';}
         T return_data() {return node_data;}   
@@ -33,6 +30,7 @@ public:
     ~ForwardList();
     ForwardList(const T& head_val);
     ForwardList(const ForwardList& list);
+    ForwardList& operator=(ForwardList& list);
     Node* begin() {return head.get();}
     Node* end() {return tail;}
     int size();
@@ -41,6 +39,7 @@ public:
     void pop_front();
     void print();
     T& front();
+    T& back();
     void insert_after(Node* pos, const T& val);
     void print_ptr();
     void erase_after(Node* pos);
@@ -86,6 +85,27 @@ ForwardList<T>::ForwardList(const ForwardList& list)
     }
     tail = list.tail;
     size_val = list.size_val;
+}
+
+template <typename T>
+ForwardList<T>& ForwardList<T>::operator=(ForwardList& list)
+{
+    this->clear();
+    if (!list.head.get()) {
+        return *this;
+    }
+    Node* copy_ptr = list.head.get();
+    head = std::make_unique<Node>(*copy_ptr);
+    Node* it_ptr = head.get();
+    copy_ptr = copy_ptr->next_node.get();
+    while (copy_ptr->next_node.get()) {
+        it_ptr->next_node = std::make_unique<Node>(*copy_ptr);
+        it_ptr = it_ptr->next_node.get();
+        copy_ptr = copy_ptr->next_node.get();
+    }
+    tail = list.tail;
+    size_val = list.size_val;
+    return *this;
 }
 
 template <typename T>
@@ -147,6 +167,15 @@ T& ForwardList<T>::front()
         throw std::runtime_error{"ForwardList<T>::front(): List is empty"};
     }
     return head.get()->node_data;
+}
+
+template <typename T>
+T& ForwardList<T>::back()
+{
+    if (!tail) {
+        throw std::runtime_error{"ForwardList<T>::back(): List is empty"};
+    }
+    return tail->node_data;
 }
 
 template <typename T>
