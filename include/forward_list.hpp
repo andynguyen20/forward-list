@@ -32,6 +32,7 @@ public:
     ForwardList(const ForwardList& list);
     ForwardList(ForwardList&& list);
     ForwardList& operator=(ForwardList& list);
+    ForwardList& operator=(ForwardList&& list);
     Node* begin() {return head.get();}
     Node* end() {return tail;}
     int size();
@@ -124,6 +125,21 @@ ForwardList<T>::ForwardList(ForwardList&& list)
 }
 
 template <typename T>
+ForwardList<T>& ForwardList<T>::operator=(ForwardList&& list)
+{
+    if (!list.head.get()) {
+        list.clear();
+        return *this;
+    }
+    tail = list.tail;
+    size_val = list.size_val;
+    list.tail = nullptr;
+    list.size_val = 0;
+    head = std::move(list.head);
+    return *this;
+}
+
+template <typename T>
 void ForwardList<T>::push_front(const T& val)
 {
     std::unique_ptr<Node> node_temp = std::make_unique<Node>(val);
@@ -181,6 +197,7 @@ T& ForwardList<T>::front()
     if (!head) {
         throw std::runtime_error{"ForwardList<T>::front(): List is empty"};
     }
+    std::cout << "ForwardList<T>::front(): front = " << head.get()->node_data << '\n';
     return head.get()->node_data;
 }
 
@@ -190,6 +207,7 @@ T& ForwardList<T>::back()
     if (!tail) {
         throw std::runtime_error{"ForwardList<T>::back(): List is empty"};
     }
+    std::cout << "ForwardList<T>::back(): back = " << tail->node_data << '\n';
     return tail->node_data;
 }
 
