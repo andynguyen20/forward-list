@@ -31,7 +31,7 @@ public:
     ForwardList(const T& head_val);
     ForwardList(const ForwardList& list);
     ForwardList(ForwardList&& list);
-    ForwardList& operator=(ForwardList& list);
+    ForwardList& operator=(const ForwardList& list);
     ForwardList& operator=(ForwardList&& list);
     Node* begin() {return head.get();}
     Node* end() {return tail;}
@@ -90,7 +90,7 @@ ForwardList<T>::ForwardList(const ForwardList& list)
 }
 
 template <typename T>
-ForwardList<T>& ForwardList<T>::operator=(ForwardList& list)
+ForwardList<T>& ForwardList<T>::operator=(const ForwardList& list)
 {
     this->clear();
     if (!list.head.get()) {
