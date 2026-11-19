@@ -77,15 +77,15 @@ ForwardList<T>::ForwardList(const ForwardList& list)
         return;
     }
     Node* copy_ptr = list.head.get();
-    head = std::make_unique<Node>(*copy_ptr);
+    head = std::make_unique<Node>(copy_ptr->node_data);
     Node* it_ptr = head.get();
     copy_ptr = copy_ptr->next_node.get();
-    while (copy_ptr->next_node.get()) {
-        it_ptr->next_node = std::make_unique<Node>(*copy_ptr);
+    while (copy_ptr) {
+        it_ptr->next_node = std::make_unique<Node>(copy_ptr->node_data);
         it_ptr = it_ptr->next_node.get();
         copy_ptr = copy_ptr->next_node.get();
     }
-    tail = list.tail;
+    tail = it_ptr;
     size_val = list.size_val;
 }
 
@@ -97,15 +97,15 @@ ForwardList<T>& ForwardList<T>::operator=(const ForwardList& list)
         return *this;
     }
     Node* copy_ptr = list.head.get();
-    head = std::make_unique<Node>(*copy_ptr);
+    head = std::make_unique<Node>(copy_ptr->node_data);
     Node* it_ptr = head.get();
     copy_ptr = copy_ptr->next_node.get();
-    while (copy_ptr->next_node.get()) {
-        it_ptr->next_node = std::make_unique<Node>(*copy_ptr);
+    while (copy_ptr) {
+        it_ptr->next_node = std::make_unique<Node>(copy_ptr->node_data);
         it_ptr = it_ptr->next_node.get();
         copy_ptr = copy_ptr->next_node.get();
     }
-    tail = list.tail;
+    tail = it_ptr;
     size_val = list.size_val;
     return *this;
 }
