@@ -30,6 +30,7 @@ public:
     ~ForwardList();
     ForwardList(const T& head_val);
     ForwardList(const ForwardList& list);
+    ForwardList(ForwardList&& list);
     ForwardList& operator=(ForwardList& list);
     Node* begin() {return head.get();}
     Node* end() {return tail;}
@@ -106,6 +107,20 @@ ForwardList<T>& ForwardList<T>::operator=(ForwardList& list)
     tail = list.tail;
     size_val = list.size_val;
     return *this;
+}
+
+template <typename T>
+ForwardList<T>::ForwardList(ForwardList&& list)
+{
+    if (!list.head.get()) {
+        list.clear();
+        return;
+    }
+    tail = list.tail;
+    size_val = list.size_val;
+    list.tail = nullptr;
+    list.size_val = 0;
+    head = std::move(list.head);
 }
 
 template <typename T>
@@ -230,6 +245,8 @@ void ForwardList<T>::clear()
         curr_node = std::move(next);
         next = std::move(curr_node->next_node);
     }
+    size_val = 0;
+    tail = nullptr;
 }
 
 #endif
