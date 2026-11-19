@@ -21,6 +21,31 @@ public:
         ~Node() {std::cout << "Destroying node: " << node_data << '\n';}
         T return_data() {return node_data;}   
     };
+    class Iterator {
+    private: 
+        Node* current = nullptr;
+    public:
+        Iterator() = default;
+        explicit Iterator(Node* ptr) : current(ptr) { }
+        T& operator*() const {return current->node_data; };
+        T* operator->() const {return &current->node_data;}
+        Iterator& operator++() {current = current->next_node.get();
+                                return *this; }
+        Iterator operator++(int ) {Iterator old = *this;
+                                   ++(*this);
+                                   return old;}
+        bool operator==(const Iterator& other) const {
+            if (current == other.current) 
+                return true;
+            return false;
+        }
+        bool operator!=(const Iterator& other) const {
+            if (*this == other) {
+                return false;
+            }
+            return true;
+        }
+    };
 private:
     std::unique_ptr<Node> head;
     Node* tail;
@@ -33,8 +58,8 @@ public:
     ForwardList(ForwardList&& list);
     ForwardList& operator=(const ForwardList& list);
     ForwardList& operator=(ForwardList&& list);
-    Node* begin() {return head.get();}
-    Node* end() {return tail;}
+    Iterator begin() {return Iterator{head.get()};}
+    Iterator end() {return Iterator{nullptr};}
     int size();
     bool empty();
     void push_front(const T& val);
